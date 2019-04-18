@@ -6,7 +6,7 @@ import png
 
 class TIFFExtractor():
     
-    def extractMatrix(self, filePath):
+    def extract(self, filePath):
         imageMat = io.imread(filePath)
         imageMat = imageMat[:, 0:-2, 0:-2]
         imageMat = imageMat * 16
@@ -50,7 +50,7 @@ class TIFFExtractor():
         
 def main():
     extract = TIFFExtractor()
-    mat = extract.extractMatrix("neuron_data/1xppk+Dcr_01-AlstR_TRiP27280_007 ch 1.tif")
+    mat = extract.extract("neuron_data/1xppk+Dcr_01-AlstR_TRiP27280_007 ch 1.tif")
     print(mat.shape)
     
     #for i in range(mat.shape[0]):

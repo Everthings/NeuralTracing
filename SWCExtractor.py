@@ -38,7 +38,7 @@ class SWCExtractor():
                 else:
                     parent_dict[parent] = [node]
                     
-        return parent_dict,node_dict
+        return parent_dict, node_dict
 
     def drawTree(self, parent_dict, node_dict, mat):
         for key in parent_dict.keys():
@@ -89,7 +89,7 @@ class SWCExtractor():
 
 if __name__ == '__main__':
     import imageio
-    mat = SWCExtractor().extract((511,511,401), "neuron_data/1xppk+Dcr_01-AlstR_TRiP27280_005_btmorphed.swc")
+    mat = SWCExtractor().extract((511, 511, 401), "neuron_data/1xppk+Dcr_01-AlstR_TRiP27280_005_btmorphed.swc")
     imageio.imwrite('test.png', np.max(mat.T, axis = 0))
     print("SWC Image Drawn!")
     #for i in range(0, 401, 10):

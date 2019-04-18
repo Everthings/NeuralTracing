@@ -12,7 +12,7 @@ class SWCNode():
 		
 class SWCReader():
 	def swc2mat(self, size, swcfile):
-		mat = np.zeros(size,dtype = np.uint8)
+		mat = np.zeros((size),dtype = np.uint8)
 		"""
 		with open(swcfile,'r') as fin:
 			for line in fin:

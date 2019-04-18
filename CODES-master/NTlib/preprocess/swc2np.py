@@ -12,7 +12,7 @@ class SWCNode():
 		
 class SWCReader():
 	def swc2mat(self, size, swcfile):
-		mat = np.zeros(size,dtype = np.uint8)
+		mat = np.zeros((size),dtype = np.uint8)
 		"""
 		with open(swcfile,'r') as fin:
 			for line in fin:
@@ -99,7 +99,7 @@ class SWCReader():
 if __name__ == '__main__':
 	from scipy import misc
 	#mat = SWCReader().swc2mat((864,840),'/Users/zheng/documents/projects/tensor_tut/neurons/checked7_janelia_flylight_part1/err_GMR_57C10_AD_01-1xLwt_attp40_4stop1-f-A01-20110325_3_A1-right_optic_lobe.v3draw.extract_5/GMR_57C10_AD_01-1xLwt_attp40_4stop1-f-A01-20110325_3_A1-right_optic_lobe.v3draw.extract_5.v3dpbd_stamp_2015_06_15_18_45.swc')
-	mat = SWCReader().swc2mat((511,511,401),'../../data/neuron/train/GMR_57C10_AD_01-1xLwt_attp40_4stop1-f-A01-20110325_3_A6-left_optic_lobe.v3draw.extract_2.v3dpbd.ano_stamp_2015_06_16_18_18.swc')
+	mat = SWCReader().swc2mat((511,511,401),"neuron_data/1xppk+Dcr_01-AlstR_TRiP27280_001_btmorphed.swc")
 	print(np.sum(mat))
 	#sample = SWCReader().generate_sample(mat)
 	misc.imsave('tt.png',np.max(mat.T,axis = 0))

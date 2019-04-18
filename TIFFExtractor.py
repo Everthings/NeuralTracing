@@ -11,13 +11,13 @@ class TIFFExtractor():
         imageMat = imageMat[:, 0:-2, 0:-2]
         imageMat = imageMat * 16
         
-        pooledMat = np.zeros(shape=(8, 511, 511), dtype = np.uint16)
+        pooledMat = np.zeros(shape=(8, 511, 511), dtype=np.uint16)
         
         for i in range(imageMat.shape[0]):
             pooledMat[i] = self._maxPool(imageMat[i], kernel_size=2, stride=2, padding=0)
             
         #adds extra channel to matrix for DataProvider    
-        pooledMat = np.expand_dims(pooledMat, axis = 3)
+        pooledMat = np.expand_dims(pooledMat, axis=3)
         
         return pooledMat;
     
@@ -40,12 +40,12 @@ class TIFFExtractor():
         output_shape = ((A.shape[0] - kernel_size)//stride + 1,
                         (A.shape[1] - kernel_size)//stride + 1)
         kernel_size = (kernel_size, kernel_size)
-        A_w = as_strided(A, shape = output_shape + kernel_size, 
-                            strides = (stride*A.strides[0],
+        A_w = as_strided(A, shape=output_shape + kernel_size,
+                            strides=(stride*A.strides[0],
                                        stride*A.strides[1]) + A.strides)
         A_w = A_w.reshape(-1, *kernel_size)
     
-        return A_w.max(axis=(1,2)).reshape(output_shape)
+        return A_w.max(axis=(1, 2)).reshape(output_shape)
     
         
 def main():

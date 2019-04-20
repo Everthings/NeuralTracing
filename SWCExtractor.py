@@ -59,8 +59,11 @@ class SWCExtractor():
         p1 = np.around(p1)
         p2 = np.around(p2)
         
+        #stores data at (z, y, x, 0) so that matrix is (cross-section, X, Y, classes) 
+        # x and -y are swappped to rotate image so it aligns with the .tif (rotates 90 counterclockwise)
+        
         if all(p1 == p2):
-            mat[p1[2], p1[0], p1[1], 0] = 1
+            mat[p1[2], -p1[1], p1[0], 0] = 1
             return mat
         
         unit_v = (p2-p1)/(np.linalg.norm(p2-p1))
@@ -70,21 +73,21 @@ class SWCExtractor():
                 diff = x - p1[0]
                 y = diff * unit_v[1] / unit_v[0] + p1[1]
                 z = diff * unit_v[2] / unit_v[0] + p1[2]
-                mat[int(round(z)), int(round(x)), int(round(y)), 0] = 1
+                mat[int(round(z)), -int(round(y)), int(round(x)), 0] = 1
             
             for y in np.linspace(p1[1],p2[1],np.abs(p2[1] - p1[1]) + 1):
                 if unit_v[1] == 0 : break
                 diff = y - p1[1]
                 x = diff * unit_v[0] / unit_v[1] + p1[0]
                 z = diff * unit_v[2] / unit_v[1] + p1[2]
-                mat[int(round(z)), int(round(x)), int(round(y)), 0] = 1
+                mat[int(round(z)), -int(round(y)), int(round(x)), 0] = 1
 
             for z in np.linspace(p1[2],p2[2],np.abs(p2[2] - p1[2]) + 1):
                 if unit_v[2] == 0 : break
                 diff = z - p1[2]
                 x = diff * unit_v[0] / unit_v[2] + p1[0]
                 y = diff * unit_v[1] / unit_v[2] + p1[1]
-                mat[int(round(z)), int(round(x)), int(round(y)), 0] = 1
+                mat[int(round(z)), -int(round(y)), int(round(x)), 0] = 1
 
         except Exception as e:
             print(str(e))
@@ -93,7 +96,7 @@ class SWCExtractor():
 
 
 if __name__ == '__main__':
-    mat = SWCExtractor().extract((401, 511, 511), "neuron_data/1xppk+Dcr_01-AlstR_TRiP27280_005_btmorphed.swc")
+    mat = SWCExtractor().extract((401, 511, 511), "neuron_data/data1_label.swc")
     print(mat.shape)
     
     #imageio.imwrite('test.png', np.max(mat.T, axis = 2))

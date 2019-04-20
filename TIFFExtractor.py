@@ -50,7 +50,7 @@ class TIFFExtractor():
         
 def main():
     extract = TIFFExtractor()
-    mat = extract.extract("neuron_data/1xppk+Dcr_01-AlstR_TRiP27280_007 ch 1.tif")
+    mat = extract.extract("neuron_data/data1_input.tif")
     print(mat.shape)
     
     #for i in range(mat.shape[0]):

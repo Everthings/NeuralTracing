@@ -1,5 +1,7 @@
 import numpy as np
 from skimage import morphology
+
+
 class SWCNode():
     def __init__(self, index, x, y, z, parent):
         self.index = index
@@ -7,7 +9,8 @@ class SWCNode():
         self.y = y
         self.z = z
         self.parent = parent
-        
+
+
 class SWCExtractor():
     def extract(self, size, filePath):
         mat = np.zeros((size), dtype = np.uint8)
@@ -15,9 +18,7 @@ class SWCExtractor():
 
         parent_dict, node_dict = self._generateTree(size, filePath)
         self._drawTree(parent_dict, node_dict, mat)
-        
         return mat
-    
 
     def _generateTree(self, size, swcfile):
         parent_dict = dict()
@@ -42,7 +43,6 @@ class SWCExtractor():
                     
         return parent_dict, node_dict
 
-
     def _drawTree(self, parent_dict, node_dict, mat):
         for key in parent_dict.keys():
             
@@ -52,14 +52,13 @@ class SWCExtractor():
 
             for child in parent_dict[key]:
                 self._drawBranch([parent.x,parent.y,parent.z], [child.x,child.y,child.z], mat)
-             
-                
+
     def _drawBranch(self, p1, p2, mat):
 
         p1 = np.around(p1)
         p2 = np.around(p2)
         
-        #stores data at (z, y, x, 0) so that matrix is (cross-section, X, Y, classes) 
+        # stores data at (z, y, x, 0) so that matrix is (cross-section, X, Y, classes)
         # x and -y are swappped to rotate image so it aligns with the .tif (rotates 90 counterclockwise)
         
         if all(p1 == p2):
@@ -99,8 +98,8 @@ if __name__ == '__main__':
     mat = SWCExtractor().extract((401, 511, 511), "neuron_data/data1_label.swc")
     print(mat.shape)
     
-    #imageio.imwrite('test.png', np.max(mat.T, axis = 2))
-    #print("SWC Image Drawn!")
-    #for i in range(0, 401, 10):
+    # imageio.imwrite('test.png', np.max(mat.T, axis = 2))
+    # print("SWC Image Drawn!")
+    # for i in range(0, 401, 10):
     #    imageio.imwrite("test" + str(i) + ".png", mat.T[i, :, :])
 

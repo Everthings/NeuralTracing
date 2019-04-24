@@ -8,18 +8,18 @@ class TIFFExtractor():
     
     def extract(self, filePath):
         imageMat = io.imread(filePath)
-        imageMat = imageMat[:, 0:-2, 0:-2]
+        #imageMat = imageMat[:, 0:-2, 0:-2]
         imageMat = imageMat * 16
         
-        pooledMat = np.zeros(shape=(8, 511, 511), dtype=np.uint16)
+        #pooledMat = np.zeros(shape=(8, 511, 511), dtype=np.uint16)
         
-        for i in range(imageMat.shape[0]):
-            pooledMat[i] = self._maxPool(imageMat[i], kernel_size=2, stride=2, padding=0)
+        #for i in range(imageMat.shape[0]):
+           # pooledMat[i] = self._maxPool(imageMat[i], kernel_size=2, stride=2, padding=0)
             
         #adds extra channel to matrix for DataProvider    
-        pooledMat = np.expand_dims(pooledMat, axis=3)
+        imageMat = np.expand_dims(imageMat, axis=3)
         
-        return pooledMat;
+        return imageMat;
     
     
     def _maxPool(self, A, kernel_size, stride, padding):
@@ -50,7 +50,7 @@ class TIFFExtractor():
         
 def main():
     extract = TIFFExtractor()
-    mat = extract.extract("neuron_data/data1_input.tif")
+    mat = extract.extract("neuron-data/data1_input.tif")
     print(mat.shape)
     
     #for i in range(mat.shape[0]):

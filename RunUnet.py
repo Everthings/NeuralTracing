@@ -2,6 +2,7 @@ from __future__ import print_function, division, absolute_import, unicode_litera
 import numpy as np
 
 
+from PIL import Image
 from tf_unet import unet
 from tf_unet.image_util import BaseDataProvider
 import TIFFExtractor
@@ -25,11 +26,14 @@ def main():
                          epochs=1,
                          dropout=0.5,
                          display_step=2)
-
+    """
     # predict more using trained unet
     data_provider = DataProvider(10000, files)
     x_test, y_test = data_provider(1)
     prediction = net.predict(path, x_test)
+
+    """
+
 
 
 class ImageDataProvider(BaseDataProvider):
@@ -101,3 +105,6 @@ class ImageDataProvider(BaseDataProvider):
         label = self._load_file(label_name, np.bool)
 
         return img, label
+
+
+main()

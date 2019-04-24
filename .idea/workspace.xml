@@ -2,7 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="9cf54466-5aea-4998-8202-1ffaab957498" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/RunUnet.py" beforeDir="false" afterPath="$PROJECT_DIR$/RunUnet.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SWCExtractor.py" beforeDir="false" afterPath="$PROJECT_DIR$/SWCExtractor.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/TIFFExtractor.py" beforeDir="false" afterPath="$PROJECT_DIR$/TIFFExtractor.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -13,11 +15,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/TIFFExtractor.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="458">
-              <caret line="52" column="25" selection-start-line="52" selection-start-column="25" selection-end-line="52" selection-end-column="25" />
+            <state relative-caret-position="585">
+              <caret line="39" column="54" lean-forward="true" selection-start-line="39" selection-start-column="54" selection-end-line="39" selection-end-column="54" />
               <folding>
                 <element signature="e#0#22#0" expanded="true" />
               </folding>
@@ -28,8 +30,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/SWCExtractor.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="150">
-              <caret line="10" column="14" selection-start-line="10" selection-start-column="14" selection-end-line="10" selection-end-column="14" />
+            <state relative-caret-position="288">
+              <caret line="100" column="13" lean-forward="true" selection-start-line="100" selection-start-column="13" selection-end-line="100" selection-end-column="13" />
               <folding>
                 <element signature="e#0#18#0" expanded="true" />
               </folding>
@@ -37,23 +39,14 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/RunUnet.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="565">
-              <caret line="103" column="25" selection-start-line="103" selection-start-column="25" selection-end-line="103" selection-end-column="25" />
+            <state relative-caret-position="170">
+              <caret line="98" column="25" lean-forward="true" selection-start-line="98" selection-start-column="25" selection-end-line="98" selection-end-column="25" />
               <folding>
                 <element signature="e#0#82#0" expanded="true" />
               </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/tf_unet/image_util.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2532">
-              <caret line="173" lean-forward="true" selection-start-line="173" selection-end-line="173" />
             </state>
           </provider>
         </entry>
@@ -75,6 +68,7 @@
       <find>mask</find>
       <find>_next_data</find>
       <find>simpl</find>
+      <find>kwarg</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -84,10 +78,10 @@
     <option name="CHANGED_PATHS">
       <list>
         <option value="$PROJECT_DIR$/Network.py" />
-        <option value="$PROJECT_DIR$/SWCExtractor.py" />
         <option value="$PROJECT_DIR$/tf_unet/image_util.py" />
-        <option value="$PROJECT_DIR$/TIFFExtractor.py" />
         <option value="$PROJECT_DIR$/RunUnet.py" />
+        <option value="$PROJECT_DIR$/SWCExtractor.py" />
+        <option value="$PROJECT_DIR$/TIFFExtractor.py" />
       </list>
     </option>
   </component>
@@ -109,6 +103,11 @@
             <path>
               <item name="Cnn Internship" type="b2602c69:ProjectViewProjectNode" />
               <item name="Cnn Internship" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="Cnn Internship" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Cnn Internship" type="462c0819:PsiDirectoryNode" />
+              <item name="pix2pix-tensorflow-master" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="Cnn Internship" type="b2602c69:ProjectViewProjectNode" />
@@ -141,7 +140,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Python.TIFFExtractor">
+  <component name="RunManager" selected="Python.Network">
     <configuration name="Network" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="Cnn Internship" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -207,9 +206,9 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.Network" />
         <item itemvalue="Python.TIFFExtractor" />
         <item itemvalue="Python.SWCExtractor" />
-        <item itemvalue="Python.Network" />
       </list>
     </recent_temporary>
   </component>
@@ -239,7 +238,7 @@
       <window_info anchor="bottom" id="Message" order="3" />
       <window_info anchor="bottom" id="Find" order="4" />
       <window_info anchor="bottom" id="Version Control" order="5" />
-      <window_info anchor="bottom" id="Run" order="6" weight="0.32885906" />
+      <window_info anchor="bottom" id="Run" order="6" visible="true" weight="0.32885906" />
       <window_info anchor="bottom" id="Debug" order="7" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="8" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="9" weight="0.4" />
@@ -314,27 +313,28 @@
     <entry file="file://$PROJECT_DIR$/TIFF0.png" />
     <entry file="file://$PROJECT_DIR$/TIFF2.png" />
     <entry file="file://$PROJECT_DIR$/TIFF1.png" />
-    <entry file="file://$PROJECT_DIR$/Network.py">
+    <entry file="file://$PROJECT_DIR$/Network.py" />
+    <entry file="file://$PROJECT_DIR$/tf_unet/image_util.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="255">
-          <caret line="17" column="21" selection-start-line="17" selection-start-column="21" selection-end-line="17" selection-end-column="21" />
-          <folding>
-            <element signature="e#0#38#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="2535">
+          <caret line="173" lean-forward="true" selection-start-line="173" selection-end-line="173" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/tf_unet/image_util.py">
+    <entry file="file://$PROJECT_DIR$/RunUnet.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2532">
-          <caret line="173" lean-forward="true" selection-start-line="173" selection-end-line="173" />
+        <state relative-caret-position="170">
+          <caret line="98" column="25" lean-forward="true" selection-start-line="98" selection-start-column="25" selection-end-line="98" selection-end-column="25" />
+          <folding>
+            <element signature="e#0#82#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/SWCExtractor.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="150">
-          <caret line="10" column="14" selection-start-line="10" selection-start-column="14" selection-end-line="10" selection-end-column="14" />
+        <state relative-caret-position="288">
+          <caret line="100" column="13" lean-forward="true" selection-start-line="100" selection-start-column="13" selection-end-line="100" selection-end-column="13" />
           <folding>
             <element signature="e#0#18#0" expanded="true" />
           </folding>
@@ -343,20 +343,10 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/TIFFExtractor.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="458">
-          <caret line="52" column="25" selection-start-line="52" selection-start-column="25" selection-end-line="52" selection-end-column="25" />
+        <state relative-caret-position="585">
+          <caret line="39" column="54" lean-forward="true" selection-start-line="39" selection-start-column="54" selection-end-line="39" selection-end-column="54" />
           <folding>
             <element signature="e#0#22#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/RunUnet.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="565">
-          <caret line="103" column="25" selection-start-line="103" selection-start-column="25" selection-end-line="103" selection-end-column="25" />
-          <folding>
-            <element signature="e#0#82#0" expanded="true" />
           </folding>
         </state>
       </provider>

@@ -9,7 +9,7 @@ class TIFFExtractor():
     def extract(self, filePath):
         imageMat = io.imread(filePath)
         #imageMat = imageMat[:, 0:-2, 0:-2]
-        imageMat = imageMat * 16
+        imageMat = imageMat // 16
         
         #pooledMat = np.zeros(shape=(8, 511, 511), dtype=np.uint16)
         
@@ -17,7 +17,7 @@ class TIFFExtractor():
            # pooledMat[i] = self._maxPool(imageMat[i], kernel_size=2, stride=2, padding=0)
             
         #adds extra channel to matrix for DataProvider    
-        imageMat = np.expand_dims(imageMat, axis=3)
+        #imageMat = np.expand_dims(imageMat, axis=3)
         
         return imageMat;
     
@@ -48,15 +48,14 @@ class TIFFExtractor():
         return A_w.max(axis=(1, 2)).reshape(output_shape)
     
         
-def main():
+if __name__ == '__main__':
     extract = TIFFExtractor()
     mat = extract.extract("neuron-data/data1_input.tif")
-    print(mat.shape)
+    print("TIFF Extracted." + str(mat.shape))
     
     #for i in range(mat.shape[0]):
     #    png.from_array(mat[i], 'L').save("TIFF" + str(i) + ".png")
      
     #print("TIFF Image Drawn!")
-    
-main()
+
 

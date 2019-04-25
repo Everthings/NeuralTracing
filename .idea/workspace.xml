@@ -2,8 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="9cf54466-5aea-4998-8202-1ffaab957498" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/LayerMapping.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/RunUnet.py" beforeDir="false" afterPath="$PROJECT_DIR$/RunUnet.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/SWCExtractor.py" beforeDir="false" afterPath="$PROJECT_DIR$/SWCExtractor.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/TIFFExtractor.py" beforeDir="false" afterPath="$PROJECT_DIR$/TIFFExtractor.py" afterDir="false" />
     </list>
@@ -15,11 +15,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/TIFFExtractor.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="585">
-              <caret line="39" column="54" lean-forward="true" selection-start-line="39" selection-start-column="54" selection-end-line="39" selection-end-column="54" />
+            <state relative-caret-position="165">
+              <caret line="11" column="33" selection-start-line="11" selection-start-column="33" selection-end-line="11" selection-end-column="33" />
               <folding>
                 <element signature="e#0#22#0" expanded="true" />
               </folding>
@@ -30,8 +30,20 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/SWCExtractor.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="288">
-              <caret line="100" column="13" lean-forward="true" selection-start-line="100" selection-start-column="13" selection-end-line="100" selection-end-column="13" />
+            <state relative-caret-position="1605">
+              <caret line="107" column="63" selection-start-line="107" selection-start-column="63" selection-end-line="107" selection-end-column="63" />
+              <folding>
+                <element signature="e#113#122#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/LayerMapping.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="298">
+              <caret line="21" column="57" selection-start-line="21" selection-start-column="57" selection-end-line="21" selection-end-column="57" />
               <folding>
                 <element signature="e#0#18#0" expanded="true" />
               </folding>
@@ -43,7 +55,7 @@
         <entry file="file://$PROJECT_DIR$/RunUnet.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="170">
-              <caret line="98" column="25" lean-forward="true" selection-start-line="98" selection-start-column="25" selection-end-line="98" selection-end-column="25" />
+              <caret line="98" column="25" selection-start-line="98" selection-start-column="25" selection-end-line="98" selection-end-column="25" />
               <folding>
                 <element signature="e#0#82#0" expanded="true" />
               </folding>
@@ -69,6 +81,13 @@
       <find>_next_data</find>
       <find>simpl</find>
       <find>kwarg</find>
+      <find>^</find>
+      <find>Nel</find>
+      <find>print</find>
+      <find>math</find>
+      <find>uint8</find>
+      <find>uint</find>
+      <find>12</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -82,6 +101,7 @@
         <option value="$PROJECT_DIR$/RunUnet.py" />
         <option value="$PROJECT_DIR$/SWCExtractor.py" />
         <option value="$PROJECT_DIR$/TIFFExtractor.py" />
+        <option value="$PROJECT_DIR$/LayerMapping.py" />
       </list>
     </option>
   </component>
@@ -103,16 +123,6 @@
             <path>
               <item name="Cnn Internship" type="b2602c69:ProjectViewProjectNode" />
               <item name="Cnn Internship" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="Cnn Internship" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Cnn Internship" type="462c0819:PsiDirectoryNode" />
-              <item name="pix2pix-tensorflow-master" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="Cnn Internship" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Cnn Internship" type="462c0819:PsiDirectoryNode" />
-              <item name="tf_unet" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -140,7 +150,28 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Python.Network">
+  <component name="RunManager" selected="Python.LayerMapping">
+    <configuration name="LayerMapping" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <module name="Cnn Internship" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/LayerMapping.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
     <configuration name="Network" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="Cnn Internship" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -206,9 +237,10 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.LayerMapping" />
+        <item itemvalue="Python.SWCExtractor" />
         <item itemvalue="Python.Network" />
         <item itemvalue="Python.TIFFExtractor" />
-        <item itemvalue="Python.SWCExtractor" />
       </list>
     </recent_temporary>
   </component>
@@ -230,7 +262,7 @@
     <editor active="true" />
     <layout>
       <window_info id="Favorites" order="0" side_tool="true" />
-      <window_info active="true" content_ui="combo" id="Project" order="1" visible="true" weight="0.24945612" />
+      <window_info content_ui="combo" id="Project" order="1" visible="true" weight="0.24945612" />
       <window_info id="Structure" order="2" side_tool="true" weight="0.25" />
       <window_info anchor="bottom" id="Terminal" order="0" />
       <window_info anchor="bottom" id="Event Log" order="1" side_tool="true" />
@@ -238,7 +270,7 @@
       <window_info anchor="bottom" id="Message" order="3" />
       <window_info anchor="bottom" id="Find" order="4" />
       <window_info anchor="bottom" id="Version Control" order="5" />
-      <window_info anchor="bottom" id="Run" order="6" visible="true" weight="0.32885906" />
+      <window_info active="true" anchor="bottom" id="Run" order="6" visible="true" weight="0.32885906" />
       <window_info anchor="bottom" id="Debug" order="7" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="8" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="9" weight="0.4" />
@@ -324,29 +356,39 @@
     <entry file="file://$PROJECT_DIR$/RunUnet.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="170">
-          <caret line="98" column="25" lean-forward="true" selection-start-line="98" selection-start-column="25" selection-end-line="98" selection-end-column="25" />
+          <caret line="98" column="25" selection-start-line="98" selection-start-column="25" selection-end-line="98" selection-end-column="25" />
           <folding>
             <element signature="e#0#82#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/SWCExtractor.py">
+    <entry file="file://$PROJECT_DIR$/TIFFExtractor.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="288">
-          <caret line="100" column="13" lean-forward="true" selection-start-line="100" selection-start-column="13" selection-end-line="100" selection-end-column="13" />
+        <state relative-caret-position="165">
+          <caret line="11" column="33" selection-start-line="11" selection-start-column="33" selection-end-line="11" selection-end-column="33" />
           <folding>
-            <element signature="e#0#18#0" expanded="true" />
+            <element signature="e#0#22#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/TIFFExtractor.py">
+    <entry file="file://$PROJECT_DIR$/SWCExtractor.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="585">
-          <caret line="39" column="54" lean-forward="true" selection-start-line="39" selection-start-column="54" selection-end-line="39" selection-end-column="54" />
+        <state relative-caret-position="1605">
+          <caret line="107" column="63" selection-start-line="107" selection-start-column="63" selection-end-line="107" selection-end-column="63" />
           <folding>
-            <element signature="e#0#22#0" expanded="true" />
+            <element signature="e#113#122#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/LayerMapping.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="298">
+          <caret line="21" column="57" selection-start-line="21" selection-start-column="57" selection-end-line="21" selection-end-column="57" />
+          <folding>
+            <element signature="e#0#18#0" expanded="true" />
           </folding>
         </state>
       </provider>

@@ -28,7 +28,7 @@ class SWCExtractor():
     
     def extract(self, size, filePath):
         mat = np.zeros((size), dtype = np.uint8)
-        mat = np.expand_dims(mat, axis = 3)
+        #mat = np.expand_dims(mat, axis = 3)
 
         parent_dict, node_dict = self._generateTree(size, filePath)
         
@@ -81,7 +81,7 @@ class SWCExtractor():
         # x and -y are swappped to rotate image so it aligns with the .tif (rotates 90 counterclockwise)
         
         if all(p1 == p2):
-            mat[int(p1[2]), int(p1[0]), int(p1[1]), 0] = 1
+            mat[int(p1[2]), int(p1[0]), int(p1[1])] = 255
             return mat
         
         unit_v = (p2-p1)/(np.linalg.norm(p2-p1))
@@ -91,21 +91,21 @@ class SWCExtractor():
                 diff = x - p1[0]
                 y = diff * unit_v[1] / unit_v[0] + p1[1]
                 z = diff * unit_v[2] / unit_v[0] + p1[2]
-                mat[int(round(z)), int(round(x)), int(round(y)), 0] = 1
+                mat[int(round(z)), int(round(x)), int(round(y))] = 255
             
             for y in np.linspace(int(p1[1]), int(p2[1]), int(np.abs(p2[1] - p1[1]) + 1)):
                 if unit_v[1] == 0 : break
                 diff = y - p1[1]
                 x = diff * unit_v[0] / unit_v[1] + p1[0]
                 z = diff * unit_v[2] / unit_v[1] + p1[2]
-                mat[int(round(z)), int(round(x)), int(round(y)), 0] = 1
+                mat[int(round(z)), int(round(x)), int(round(y))] = 255
 
             for z in np.linspace(int(p1[2]), int(p2[2]), int(np.abs(p2[2] - p1[2]) + 1)):
                 if unit_v[2] == 0 : break
                 diff = z - p1[2]
                 x = diff * unit_v[0] / unit_v[2] + p1[0]
                 y = diff * unit_v[1] / unit_v[2] + p1[1]
-                mat[int(round(z)), int(round(x)), int(round(y)), 0] = 1
+                mat[int(round(z)), int(round(x)), int(round(y))] = 255
 
         except Exception as e:
             print(str(e))
@@ -140,7 +140,7 @@ class SWCExtractor():
 if __name__ == '__main__':
     import imageio
     mat = SWCExtractor().extract((10, 1024, 1024), "neuron-data/data1_label.swc")
-    print(mat.shape)
+    print("SWC Extracted." + str(mat.shape))
     
     #imageio.imwrite("test.png", np.max(mat.T, axis = 2))
     

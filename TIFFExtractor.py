@@ -10,7 +10,7 @@ class TIFFExtractor():
         imageMat = io.imread(filePath)
         #imageMat = imageMat[:, 0:-2, 0:-2]
         #imageMat[imageMat < 2000] = 0
-        imageMat = imageMat / 16
+        imageMat = imageMat // 16
         
         #pooledMat = np.zeros(shape=(8, 511, 511), dtype=np.uint16)
         

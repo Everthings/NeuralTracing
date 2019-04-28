@@ -23,11 +23,12 @@ class SWCNode():
 
 class SWCExtractor():
     
-    side = 1024
+    side = 0
     ds = 1.612
     
     def extract(self, size, filePath):
         mat = np.zeros((size), dtype = np.uint8)
+        self.side = size[1]
         #mat = np.expand_dims(mat, axis = 3)
 
         parent_dict, node_dict = self._generateTree(size, filePath)
@@ -35,7 +36,9 @@ class SWCExtractor():
         delta = self._gridSearch(filePath)
         
         self._drawTree(parent_dict, node_dict, mat, delta)
-        return mat
+        
+        return np.transpose(mat, axes = (0, 2, 1));
+        #return mat.T
 
     def _generateTree(self, size, swcfile):
         parent_dict = dict()
@@ -140,13 +143,12 @@ class SWCExtractor():
 if __name__ == '__main__':
     import imageio
     mat = SWCExtractor().extract((10, 1024, 1024), "neuron-data/data1_label.swc")
-    print("SWC Extracted." + str(mat.shape))
+    print("SWC Extracted: " + str(mat.shape))
     
-    #imageio.imwrite("test.png", np.max(mat.T, axis = 2))
+    imageio.imwrite("test.png", np.max(mat, axis = 0))
     
-    #for i in range(0, 10):
-    #    print((mat.T[:, :, i].shape))
-    #    imageio.imwrite("test" + str(i) + ".png", mat.T[:, :, i])
+    for i in range(0, 10):
+        imageio.imwrite("test" + str(i) + ".png", mat[i, :, :])
     
     # imageio.imwrite('test.png', np.max(mat.T, axis = 2))
     # print("SWC Image Drawn!")

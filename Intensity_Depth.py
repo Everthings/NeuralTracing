@@ -36,7 +36,7 @@ class Intensity_Depth:
         points = self._getNewPoints(parent_dict, node_dict, delta)
         final_matrix = self.distributed_intensity_mat(points)
 
-        return final_matrix
+        return np.transpose(final_matrix, axes = (0, 2, 1));
 
 
     def _generateTree(self, size, swcfile):
@@ -179,11 +179,7 @@ class Intensity_Depth:
 
 def main():
     import imageio
-    import os
-    dirpath = os.getcwd()
-    print("current directory is:" + dirpath)
     
-
     mat = Intensity_Depth().map((10, 1024, 1024), "neuron-data/data1_label.swc", "neuron-data/data1_input.tif")
 
     for i in range(8):

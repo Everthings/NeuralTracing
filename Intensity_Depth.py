@@ -1,6 +1,7 @@
 import numpy as np
-from scipy.optimize import minimize
-
+from skimage import io
+import os
+import math
 
 from TIFFExtractor import TIFFExtractor
 from SWCExtractor import SWCExtractor
@@ -18,20 +19,21 @@ class Point():
         self.x = x
         self.y = y
 
-    def __init__(self, x, y, z):
-        self.x = x
-        self.y = y
+    def add_z(self, z):
         self.z = z
 
 
 class Intensity_Depth:
     # use l2, return float
     TIFF = None
+    ds = 1.612
+    side = 1024
 
     def map(self, size, swc_filepath, tiff_filepath):
         self.TIFF = TIFFExtractor().extract(tiff_filepath)
         parent_dict, node_dict = self._generateTree(size, swc_filepath)
-        points = self._getNewPoints(parent_dict, node_dict)
+        delta = self._gridSearch(swc_filepath)
+        points = self._getNewPoints(parent_dict, node_dict, delta)
         final_matrix = self.distributed_intensity_mat(points)
 
         return final_matrix
@@ -61,7 +63,7 @@ class Intensity_Depth:
         return parent_dict, node_dict
 
 
-    def _getNewPoints(self, parent_dict, node_dict):
+    def _getNewPoints(self, parent_dict, node_dict, delta):
 
         points = []
 
@@ -72,24 +74,34 @@ class Intensity_Depth:
             parent = node_dict[key]
 
             for child in parent_dict[key]:
-                subpoints = self._generate_subpoints(Point(parent.x, parent.y), Point(child.x, child.y))
+                subpoints = self._generate_subpoints(Point((delta[4] - parent.x) * self.ds + delta[0], (parent.y - delta[5])*self.ds + delta[1]), Point((delta[4] - child.x) * self.ds + delta[0], (child.y - delta[5])*self.ds + delta[1]))
                 for point in subpoints:
                     intensities = self._get_intensities(point)
                     new_z = self._calc_z(intensities)
-                    points.append(Point(point.x, point.z, new_z))
+                    #points.append(Point(point.x, point.z, new_z))
+                    point.add_z(new_z)
+                    points.append(point)
 
         return points
 
 
     def _get_intensities(self, p):
-        return self.TIFF[:][p.x][p.y]
+        return self.TIFF[:, p.x, p.y]
 
 
     def _calc_z(self, intensities):
-        return np.dot([0, 1, 2, 3, 4, 5, 6, 7], intensities)/sum(intensities)
+        z = np.dot([0, 1, 2, 3, 4, 5, 6, 7], intensities)/sum(intensities)
+        if math.isnan(z):
+            return -1
+        else:
+            return z
 
 
-    def _generate_subpoints(self, p1, p2):
+    def _generate_subpoints(self, point1, point2):
+        
+        p1 = [point1.x, point1.y]
+        p2 = [point2.x, point2.y]
+        
         p1 = np.around(p1)
         p2 = np.around(p2)
 
@@ -121,10 +133,14 @@ class Intensity_Depth:
 
     def distributed_intensity_mat(self, points):
         mapped_intensity = 255
-        mat = np.zeros(8, 1024, 1024)
+        mat = np.zeros((8, 1024, 1024), dtype = np.uint8)
         for p in points:
-            lower_bound = p.z//1
+            if p.z == -1:
+                continue
+            
+            lower_bound = (int)(p.z)
             res = p.z - lower_bound
+            
             if (res == 0):
                 mat[lower_bound][p.x][p.y] = mapped_intensity
             else:
@@ -134,6 +150,31 @@ class Intensity_Depth:
                 mat[lower_bound][p.x][p.y] = inverse_down * normalizer
                 mat[lower_bound+1][p.x][p.y] = inverse_up * normalizer
         return mat
+    
+    
+    def _gridSearch(self, fname):
+        swc = np.loadtxt(fname, dtype=np.int16)
+        tif = io.imread(os.path.splitext(fname)[0].split("_")[0] + '_input.tif')
+        #ls = list(tif.iter_images())
+        merge = np.max(tif, axis=0)
+        result = [0, 0, 0, 0, 0, 0]
+        Smax = 0
+        Xmax = np.max(swc[:,3])
+        Xmin = np.min(swc[:,3])
+        Ymax = np.max(swc[:,2])
+        Ymin = np.min(swc[:,2])
+        for dx in range(0, self.side-int((Xmax-Xmin)*self.ds)):
+            for dy in range(0, self.side-int((Ymax-Ymin)*self.ds)):
+                Sum = np.sum(merge[((Xmax-swc[:,3])*self.ds+dx).astype(np.int),((swc[:,2]-Ymin)*self.ds+dy).astype(np.int)])
+                if Sum > Smax:
+                    result[0] = dx
+                    result[1] = dy
+                    Smax = Sum
+        result[2] = int((Xmax-Xmin)*self.ds+result[0])
+        result[3] = int((Ymax-Ymin)*self.ds+result[1])
+        result[4] = Xmax
+        result[5] = Ymin
+        return result
 
 
 def main():
@@ -141,6 +182,7 @@ def main():
     import os
     dirpath = os.getcwd()
     print("current directory is:" + dirpath)
+    
 
     mat = Intensity_Depth().map((10, 1024, 1024), "neuron-data/data1_label.swc", "neuron-data/data1_input.tif")
 

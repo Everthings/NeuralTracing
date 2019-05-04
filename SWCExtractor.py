@@ -37,7 +37,7 @@ class SWCExtractor():
         
         self._drawTree(parent_dict, node_dict, mat, delta)
         
-        return np.transpose(mat, axes = (0, 2, 1));
+        return mat
         #return mat.T
 
     def _generateTree(self, size, swcfile):

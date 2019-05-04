@@ -20,7 +20,7 @@ class TIFFExtractor():
         #adds extra channel to matrix for DataProvider    
         #imageMat = np.expand_dims(imageMat, axis=3)
         
-        return np.transpose(imageMat, axes = (0, 2, 1));
+        return imageMat
     
     
     def _maxPool(self, A, kernel_size, stride, padding):

@@ -34,9 +34,9 @@ class Intensity_Depth:
         parent_dict, node_dict = self._generateTree(size, swc_filepath)
         delta = self._gridSearch(swc_filepath)
         points = self._getNewPoints(parent_dict, node_dict, delta)
-        final_matrix = self.distributed_intensity_mat(points)
+        final_matrix = self._distributIntensitiesToMat(points)
 
-        return np.transpose(final_matrix, axes = (0, 2, 1));
+        return final_matrix
 
 
     def _generateTree(self, size, swcfile):
@@ -74,10 +74,10 @@ class Intensity_Depth:
             parent = node_dict[key]
 
             for child in parent_dict[key]:
-                subpoints = self._generate_subpoints(Point((delta[4] - parent.x) * self.ds + delta[0], (parent.y - delta[5])*self.ds + delta[1]), Point((delta[4] - child.x) * self.ds + delta[0], (child.y - delta[5])*self.ds + delta[1]))
+                subpoints = self._generateSubpoints(Point((delta[4] - parent.x) * self.ds + delta[0], (parent.y - delta[5])*self.ds + delta[1]), Point((delta[4] - child.x) * self.ds + delta[0], (child.y - delta[5])*self.ds + delta[1]))
                 for point in subpoints:
-                    intensities = self._get_intensities(point)
-                    new_z = self._calc_z(intensities)
+                    intensities = self._getIntensities(point)
+                    new_z = self._calcZ(intensities)
                     #points.append(Point(point.x, point.z, new_z))
                     point.add_z(new_z)
                     points.append(point)
@@ -85,19 +85,20 @@ class Intensity_Depth:
         return points
 
 
-    def _get_intensities(self, p):
+    def _getIntensities(self, p):
         return self.TIFF[:, p.x, p.y]
 
 
-    def _calc_z(self, intensities):
+    def _calcZ(self, intensities):
         z = np.dot([0, 1, 2, 3, 4, 5, 6, 7], intensities)/sum(intensities)
+        
         if math.isnan(z):
             return -1
         else:
             return z
 
 
-    def _generate_subpoints(self, point1, point2):
+    def _generateSubpoints(self, point1, point2):
         
         p1 = [point1.x, point1.y]
         p2 = [point2.x, point2.y]
@@ -131,7 +132,7 @@ class Intensity_Depth:
 
 
 
-    def distributed_intensity_mat(self, points):
+    def _distributIntensitiesToMat(self, points):
         mapped_intensity = 255
         mat = np.zeros((8, 1024, 1024), dtype = np.uint8)
         for p in points:
@@ -141,14 +142,17 @@ class Intensity_Depth:
             lower_bound = (int)(p.z)
             res = p.z - lower_bound
             
-            if (res == 0):
+            if (res < 0.001):
                 mat[lower_bound][p.x][p.y] = mapped_intensity
+            elif (res > 0.999):
+                mat[lower_bound + 1][p.x][p.y] = mapped_intensity
             else:
                 inverse_down = 1 / res
                 inverse_up = 1 / (1 - res)
                 normalizer = mapped_intensity / (inverse_up + inverse_down)
-                mat[lower_bound][p.x][p.y] = inverse_down * normalizer
-                mat[lower_bound+1][p.x][p.y] = inverse_up * normalizer
+                mat[lower_bound][p.x][p.y] = (int)(inverse_down * normalizer)
+                mat[lower_bound+1][p.x][p.y] = (int)(inverse_up * normalizer)
+                
         return mat
     
     
@@ -165,7 +169,7 @@ class Intensity_Depth:
         Ymin = np.min(swc[:,2])
         for dx in range(0, self.side-int((Xmax-Xmin)*self.ds)):
             for dy in range(0, self.side-int((Ymax-Ymin)*self.ds)):
-                Sum = np.sum(merge[((Xmax-swc[:,3])*self.ds+dx).astype(np.int),((swc[:,2]-Ymin)*self.ds+dy).astype(np.int)])
+                Sum = np.sum(merge[((Xmax-swc[:,3])*self.ds+dx).astype(np.int), ((swc[:,2]-Ymin)*self.ds+dy).astype(np.int)])
                 if Sum > Smax:
                     result[0] = dx
                     result[1] = dy
@@ -183,8 +187,7 @@ def main():
     mat = Intensity_Depth().map((10, 1024, 1024), "neuron-data/data1_label.swc", "neuron-data/data1_input.tif")
 
     for i in range(8):
-        imageio.imwrite("test" + str(i) + ".png", mat[i, :, :])
-
+        imageio.imwrite("test" + str(i) + ".png", mat[i])
 
 
 main()

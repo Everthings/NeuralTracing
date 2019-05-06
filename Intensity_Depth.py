@@ -86,8 +86,18 @@ class Intensity_Depth:
 
 
     def _getIntensities(self, p):
-        return self.TIFF[:, p.x, p.y]
+        patch = self.getSquarePatchFromTIFF(p.x, p.y, 4)
+        return np.amax(np.amax(patch, axis = 1), axis = 1)
+        #return self.TIFF[:, p.x, p.y]
 
+    def getSquarePatchFromTIFF(self, x, y, n):
+        # n is amount spanned from the center in all directions
+        lower_x = max(0, x - n)
+        lower_y = max(0, y - n)
+        upper_x = min(len(self.TIFF[0]), x + n)
+        upper_y = min(len(self.TIFF[0][0]), y + n)
+        
+        return self.TIFF[:, lower_x : upper_x + 1, lower_y : upper_y + 1]
 
     def _calcZ(self, intensities):
         z = np.dot([0, 1, 2, 3, 4, 5, 6, 7], intensities)/sum(intensities)
@@ -187,7 +197,7 @@ def main():
     mat = Intensity_Depth().map((10, 1024, 1024), "neuron-data/data1_label.swc", "neuron-data/data1_input.tif")
 
     for i in range(8):
-        imageio.imwrite("test" + str(i) + ".png", mat[i])
+        imageio.imwrite("swc_layer_" + str(i) + ".png", mat[i])
 
 
 main()

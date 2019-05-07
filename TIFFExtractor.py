@@ -22,6 +22,23 @@ class TIFFExtractor():
         
         return imageMat
     
+    def readSWCTIFFS(self, file_path):
+        import glob
+    
+        files = glob.glob('processed-swcs/*.tif', recursive=True)
+        
+        data_root = file_path.split("_")[0].split("/")[1] + "_"
+        
+        imarray = io.imread(file_path)
+        imarray = np.transpose(imarray, (2, 0, 1))
+        
+        for file in files:
+            if data_root in file and file.split("_")[2][0] != "1":
+                imarray2 = io.imread(file)
+                imarray2 = np.transpose(imarray2, (2, 0, 1))
+                imarray = np.concatenate((imarray, imarray2), axis = 0)
+        
+        return imarray
     
     def _maxPool(self, A, kernel_size, stride, padding):
         '''
@@ -50,6 +67,8 @@ class TIFFExtractor():
     
         
 if __name__ == '__main__':
+    import imageio
+
     extract = TIFFExtractor()
     mat = extract.extract("neuron-data/data1_input.tif")
     print("TIFF Extracted: " + str(mat.shape))

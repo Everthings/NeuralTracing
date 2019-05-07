@@ -27,12 +27,11 @@ class Intensity_Depth:
     # use l2, return float
     TIFF = None
     ds = 1.612
-    side = 1024
 
     def map(self, size, swc_filepath, tiff_filepath):
         self.TIFF = TIFFExtractor().extract(tiff_filepath)
         parent_dict, node_dict = self._generateTree(size, swc_filepath)
-        delta = self._gridSearch(swc_filepath)
+        delta = self._gridSearch(swc_filepath, tiff_filepath)
         points = self._getNewPoints(parent_dict, node_dict, delta)
         final_matrix = self._distributIntensitiesToMat(points)
 
@@ -100,7 +99,7 @@ class Intensity_Depth:
         return self.TIFF[:, lower_x : upper_x + 1, lower_y : upper_y + 1]
 
     def _calcZ(self, intensities):
-        z = np.dot([0, 1, 2, 3, 4, 5, 6, 7], intensities)/sum(intensities)
+        z = np.dot([x for x in range(len(intensities))], intensities)/sum(intensities)
         
         if math.isnan(z):
             return -1
@@ -144,7 +143,7 @@ class Intensity_Depth:
 
     def _distributIntensitiesToMat(self, points):
         mapped_intensity = 255
-        mat = np.zeros((8, 1024, 1024), dtype = np.uint8)
+        mat = np.zeros((len(self.TIFF), 1024, 1024), dtype = np.uint8)
         for p in points:
             if p.z == -1:
                 continue
@@ -166,9 +165,9 @@ class Intensity_Depth:
         return mat
     
     
-    def _gridSearch(self, fname):
-        swc = np.loadtxt(fname, dtype=np.int16)
-        tif = io.imread(os.path.splitext(fname)[0].split("_")[0] + '_input.tif')
+    def _gridSearch(self, swc_filepath, tiff_filepath):
+        swc = np.loadtxt(swc_filepath, dtype=np.int16)
+        tif = io.imread(tiff_filepath)
         #ls = list(tif.iter_images())
         merge = np.max(tif, axis=0)
         result = [0, 0, 0, 0, 0, 0]
@@ -177,8 +176,8 @@ class Intensity_Depth:
         Xmin = np.min(swc[:,3])
         Ymax = np.max(swc[:,2])
         Ymin = np.min(swc[:,2])
-        for dx in range(0, self.side-int((Xmax-Xmin)*self.ds)):
-            for dy in range(0, self.side-int((Ymax-Ymin)*self.ds)):
+        for dx in range(0, len(self.TIFF[0])-int((Xmax-Xmin)*self.ds)):
+            for dy in range(0, len(self.TIFF[0][0])-int((Ymax-Ymin)*self.ds)):
                 Sum = np.sum(merge[((Xmax-swc[:,3])*self.ds+dx).astype(np.int), ((swc[:,2]-Ymin)*self.ds+dy).astype(np.int)])
                 if Sum > Smax:
                     result[0] = dx
@@ -193,11 +192,47 @@ class Intensity_Depth:
 
 def main():
     import imageio
+    from PIL import Image
+    from skimage import io
     
-    mat = Intensity_Depth().map((10, 1024, 1024), "neuron-data/data1_label.swc", "neuron-data/data1_input.tif")
+    
+    #mat = Intensity_Depth().map((10, 1024, 1024), "neuron-data/data1_label.swc", "neuron-data/data1_input.tif")
 
-    for i in range(8):
-        imageio.imwrite("swc_layer_" + str(i) + ".png", mat[i])
+    
+    for i in range(1, 32):
+        mat = Intensity_Depth().map((10, 1024, 1024), "neuron-data/data" + str(i) + "_label.swc", "neuron-data/data" + str(i) + "_input.tif")
+    
+        mat = np.transpose(mat, (1, 2, 0))
+        
+        
+        if len(mat[0][0]) == 8:
+            im1 = Image.fromarray(mat[:, :, 0:4])
+            im1.save("processed-swcs/data" + str(i) + "_label" + "_1.tif")
+            im2 = Image.fromarray(mat[:, :, 4:8])
+            im2.save("processed-swcs/data" + str(i) + "_label" + "_2.tif")
+        elif len(mat[0][0]) == 7:
+            im1 = Image.fromarray(mat[:, :, 0:4])
+            im1.save("processed-swcs/data" + str(i) + "_label" + "_1.tif")
+            im2 = Image.fromarray(mat[:, :, 4:7])
+            im2.save("processed-swcs/data" + str(i) + "_label" + "_2.tif")
+        elif len(mat[0][0]) == 9:
+            im1 = Image.fromarray(mat[:, :, 0:3])
+            im1.save("processed-swcs/data" + str(i) + "_label" + "_1.tif")
+            im2 = Image.fromarray(mat[:, :, 3:6])
+            im2.save("processed-swcs/data" + str(i) + "_label" + "_2.tif")
+            im3 = Image.fromarray(mat[:, :, 6:9])
+            im3.save("processed-swcs/data" + str(i) + "_label" + "_3.tif")
+
+        print("Saved: " + str(i))
+
+    
+    #for i in range(8):
+    #    imageio.imwrite("swc_layer_" + str(i) + ".png", mat[i])
+    
+    #mat = TIFFExtractor().readSWCTIFFS("processed-swcs/data10_label_1.tif", "processed-swcs/data10_label_2.tif")
+    
+    #for i in range(8):
+    #    imageio.imwrite("oi" + str(i) + ".png", mat[i])
 
 
 main()

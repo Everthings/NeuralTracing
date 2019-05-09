@@ -196,7 +196,7 @@ def main():
     from skimage import io
     
     
-    #mat = Intensity_Depth().map((10, 1024, 1024), "neuron-data/data1_label.swc", "neuron-data/data1_input.tif")
+    mat = Intensity_Depth().map((10, 1024, 1024), "neuron-data/data1_label.swc", "neuron-data/data1_input.tif")
 
     
     for i in range(1, 32):

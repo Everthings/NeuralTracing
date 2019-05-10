@@ -8,3 +8,6 @@ We started with an intial dataset of 30 1024x201024xN input(tif) - output(swc) p
 ![alt text](https://user-images.githubusercontent.com/16503485/57531125-c4c8c200-7306-11e9-8593-43c9812788bf.png)
 
 #### Corresponding TIFFs
+![alt text](https://user-images.githubusercontent.com/16503485/57531129-c6928580-7306-11e9-9289-0d0b10af4a19.png)
+![alt text](https://user-images.githubusercontent.com/16503485/57531133-c85c4900-7306-11e9-8675-7cc8cebf1bac.png
+![alt text](https://user-images.githubusercontent.com/16503485/57531135-c98d7600-7306-11e9-9d2f-0bacb29e4524.png)

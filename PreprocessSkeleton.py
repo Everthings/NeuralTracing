@@ -6,6 +6,7 @@ Created on Thu May  9 13:24:42 2019
 """
 
 import numpy as np
+import random as rand
 from SWCExtractor import SWCExtractor
 from TIFFExtractor import TIFFExtractor
 
@@ -32,7 +33,7 @@ class Data():
         
 
 class PreprocessSkeleton():
-    box_size = 150
+    box_size = 128
     n = 50
     size = (1024, 1024)
     
@@ -91,6 +92,12 @@ class PreprocessSkeleton():
 
 
     def _getBox(self, p, mat):
+        # rand offset to vary training data so not all training data is centered on a line
+        rand_offset_x = int((rand.random()-0.5)*self.box_size)
+        rand_offset_y = int((rand.random()-0.5)*self.box_size)
+
+        p = Point(p.x + rand_offset_x, p.y + rand_offset_y)
+
         lower_bound_x = int(max(0, p.x - self.box_size/2))
         lower_bound_y = int(max(0, p.y - self.box_size/2))
         upper_bound_x = int(min(self.size[0], p.x + self.box_size/2))

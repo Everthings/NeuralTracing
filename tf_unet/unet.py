@@ -12,11 +12,6 @@
 # along with tf_unet.  If not, see <http://www.gnu.org/licenses/>.
 
 
-'''
-Created on Jul 28, 2016
-
-author: jakeret
-'''
 from __future__ import print_function, division, absolute_import, unicode_literals
 
 import os
@@ -451,8 +446,10 @@ class Trainer(object):
 
                 self.output_epoch_stats(epoch, total_loss, training_iters, lr)
                 self.store_prediction(sess, test_x, test_y, "epoch_%s" % epoch)
-
+                
                 save_path = self.net.save(sess, save_path)
+                print("Saved at: " + save_path)
+                
             logging.info("Optimization Finished!")
 
             return save_path

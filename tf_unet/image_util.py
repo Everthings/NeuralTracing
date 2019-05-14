@@ -52,7 +52,7 @@ class BaseDataProvider(object):
         
         nx = train_data.shape[1]
         ny = train_data.shape[0]
-
+        
         return train_data.reshape(1, ny, nx, self.channels), labels.reshape(1, ny, nx, self.n_class),
     
     def _process_labels(self, label):

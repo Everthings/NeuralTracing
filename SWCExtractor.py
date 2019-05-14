@@ -23,24 +23,23 @@ class SWCNode():
 
 class SWCExtractor():
     
-    side = 0
+    side = 1024
     ds = 1.612
     
-    def extract(self, size, filePath):
-        mat = np.zeros((size), dtype = np.uint8)
-        self.side = size[1]
+    def extract(self, size, swc_file_path, tif_file_path):
+        mat = np.zeros(size, dtype = np.uint8)
         #mat = np.expand_dims(mat, axis = 3)
 
-        parent_dict, node_dict = self._generateTree(size, filePath)
+        parent_dict, node_dict = self.generateTree(swc_file_path)
         
-        delta = self._gridSearch(filePath)
+        delta = self.gridSearch(swc_file_path, tif_file_path)
         
-        self._drawTree(parent_dict, node_dict, mat, delta)
+        self.drawTree(parent_dict, node_dict, mat, delta)
         
         return mat
         #return mat.T
 
-    def _generateTree(self, size, swcfile):
+    def generateTree(self, swcfile):
         parent_dict = dict()
         node_dict = dict()
         
@@ -63,7 +62,7 @@ class SWCExtractor():
                     
         return parent_dict, node_dict
 
-    def _drawTree(self, parent_dict, node_dict, mat, delta):
+    def drawTree(self, parent_dict, node_dict, mat, delta):
         
         for key in parent_dict.keys():
             
@@ -115,9 +114,11 @@ class SWCExtractor():
 
         return mat
     
-    def _gridSearch(self, fname):
-        swc = np.loadtxt(fname, dtype=np.int16)
-        tif = io.imread(os.path.splitext(fname)[0].split("_")[0] + '_input.tif')
+    
+    def gridSearch(self, swc_filepath, tiff_filepath):
+        from skimage import io
+        swc = np.loadtxt(swc_filepath, dtype=np.int16)
+        tif = io.imread(tiff_filepath)
         #ls = list(tif.iter_images())
         merge = np.max(tif, axis=0)
         result = [0, 0, 0, 0, 0, 0]
@@ -128,7 +129,7 @@ class SWCExtractor():
         Ymin = np.min(swc[:,2])
         for dx in range(0, self.side-int((Xmax-Xmin)*self.ds)):
             for dy in range(0, self.side-int((Ymax-Ymin)*self.ds)):
-                Sum = np.sum(merge[((Xmax-swc[:,3])*self.ds+dx).astype(np.int),((swc[:,2]-Ymin)*self.ds+dy).astype(np.int)])
+                Sum = np.sum(merge[((Xmax-swc[:,3])*self.ds+dx).astype(np.int), ((swc[:,2]-Ymin)*self.ds+dy).astype(np.int)])
                 if Sum > Smax:
                     result[0] = dx
                     result[1] = dy
@@ -142,7 +143,7 @@ class SWCExtractor():
 
 if __name__ == '__main__':
     import imageio
-    mat = SWCExtractor().extract((10, 1024, 1024), "neuron-data/data1_label.swc")
+    mat = SWCExtractor().extract((10, 1024, 1024), "neuron-data/data1_label.swc", "neuron-data/data1_input.tif")
     print("SWC Extracted: " + str(mat.shape))
     
     imageio.imwrite("test.png", np.max(mat, axis = 0))

@@ -87,6 +87,10 @@ def crop_to_shape(data, shape):
     :param data: the array to crop
     :param shape: the target shape
     """
+    
+    if data.shape[1:3] == shape[1:3]:
+        return data
+    
     diff_nx = (data.shape[1] - shape[1])
     diff_ny = (data.shape[2] - shape[2])
 
@@ -113,9 +117,10 @@ def combine_img_prediction(data, gt, pred):
     """
     ny = pred.shape[2]
     ch = data.shape[3]
+
     img = np.concatenate((to_rgb(crop_to_shape(data, pred.shape).reshape(-1, ny, ch)), 
                           to_rgb(crop_to_shape(gt[..., 1], pred.shape).reshape(-1, ny, 1)), 
-                          to_rgb(pred[..., 1].reshape(-1, ny, 1))), axis=1)
+                          to_rgb(pred[..., 1].reshape(-1, ny, 1))), axis=2)
     return img
 
 def save_image(img, path):
@@ -125,7 +130,10 @@ def save_image(img, path):
     :param img: the rgb image to save
     :param path: the target path
     """
-    Image.fromarray(img.round().astype(np.uint8)).save(path, 'JPEG', dpi=[300,300], quality=90)
+
+    Image.fromarray(np.max(img.round().astype(np.uint8)[:, : , 0:9], axis = 2)).save("input.png")
+    Image.fromarray(img.round().astype(np.uint8)[:, : , 9:12]).save("gt.png")
+    Image.fromarray(img.round().astype(np.uint8)[:, : , 12:15]).save("pred.png")
 
 
 def create_training_path(output_path, prefix="run_"):

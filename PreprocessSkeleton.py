@@ -78,6 +78,11 @@ class PreprocessSkeleton():
                     counter += 1
                     
                     if counter % self.n == 0:
+                        
+                        rand_offset_x = int((rand.random()-0.5)*self.box_size)
+                        rand_offset_y = int((rand.random()-0.5)*self.box_size)
+                        point = Point(point.x + rand_offset_x, point.y + rand_offset_y)
+                        
                         box_swc = self._getBox(point, self.swc)
                         box_tiff = []
                         for layer in self.tiff:
@@ -93,11 +98,6 @@ class PreprocessSkeleton():
 
     def _getBox(self, p, mat):
         # rand offset to vary training data so not all training data is centered on a line
-        rand_offset_x = int((rand.random()-0.5)*self.box_size)
-        rand_offset_y = int((rand.random()-0.5)*self.box_size)
-
-        p = Point(p.x + rand_offset_x, p.y + rand_offset_y)
-
         lower_bound_x = int(max(0, p.x - self.box_size/2))
         lower_bound_y = int(max(0, p.y - self.box_size/2))
         upper_bound_x = int(min(self.size[0], p.x + self.box_size/2))
@@ -173,7 +173,6 @@ def main():
     from PIL import Image
     import imageio
     
-    alphabet = "abcdefghijklmnopqrstuvwxyz!@#$%^&*()"
     counter = 1
     
     processor = PreprocessSkeleton()
@@ -187,72 +186,8 @@ def main():
             depth = dPoint.input.shape[0]
             dPoint.input = np.transpose(dPoint.input, (1, 2, 0))
             
-            """
-            if depth == 6:
-                im1 = Image.fromarray(dPoint.input[:, :, 0:2])
-                im1.save("subimages/image_" + alphabet[j] + str(i) + "_tif_1.png")
-                im2 = Image.fromarray(dPoint.input[:, :, 2:4])
-                im2.save("subimages/image_" + alphabet[j] + str(i) + "_tif_2.png")
-                im3 = Image.fromarray(dPoint.input[:, :, 4:6])
-                im3.save("subimages/image_" + alphabet[j] + str(i) + "_tif_3.png")
-            elif depth == 7:
-                im1 = Image.fromarray(dPoint.input[:, :, 0:3])
-                im1.save("subimages/image_" + alphabet[j] + str(i) + "_tif_1.png")
-                im2 = Image.fromarray(dPoint.input[:, :, 3:5])
-                im2.save("subimages/image_" + alphabet[j] + str(i) + "_tif_2.png")
-                im3 = Image.fromarray(dPoint.input[:, :, 5:7])
-                im3.save("subimages/image_" + alphabet[j] + str(i) + "_tif_3.png")
-            elif depth == 8:
-                im1 = Image.fromarray(dPoint.input[:, :, 0:3])
-                im1.save("subimages/image_" + alphabet[j] + str(i) + "_tif_1.png")
-                im2 = Image.fromarray(dPoint.input[:, :, 3:6])
-                im2.save("subimages/image_" + alphabet[j] + str(i) + "_tif_2.png")
-                im3 = Image.fromarray(dPoint.input[:, :, 6:8])
-                im3.save("subimages/image_" + alphabet[j] + str(i) + "_tif_3.png")
-            elif depth == 9:
-                im1 = Image.fromarray(dPoint.input[:, :, 0:3])
-                im1.save("subimages/image_" + alphabet[j] + str(i) + "_tif_1.png")
-                im2 = Image.fromarray(dPoint.input[:, :, 3:6])
-                im2.save("subimages/image_" + alphabet[j] + str(i) + "_tif_2.png")
-                im3 = Image.fromarray(dPoint.input[:, :, 6:9])
-                im3.save("subimages/image_" + alphabet[j] + str(i) + "_tif_3.png")
-            else:
-                print("Extra Depth in ProcessSkeleton: " + str(depth))   
-            """
             
             """
-            if depth == 6:
-                im1 = Image.fromarray(dPoint.input[:, :, 0:2])
-                im1.save("subimages/image_" + str(counter) + "_tif_1.png")
-                im2 = Image.fromarray(dPoint.input[:, :, 2:4])
-                im2.save("subimages/image_" + str(counter) + "_tif_2.png")
-                im3 = Image.fromarray(dPoint.input[:, :, 4:6])
-                im3.save("subimages/image_" + str(counter) + "_tif_3.png")
-            elif depth == 7:
-                im1 = Image.fromarray(dPoint.input[:, :, 0:3])
-                im1.save("subimages/image_" + str(counter) + "_tif_1.png")
-                im2 = Image.fromarray(dPoint.input[:, :, 3:5])
-                im2.save("subimages/image_" + str(counter) + "_tif_2.png")
-                im3 = Image.fromarray(dPoint.input[:, :, 5:7])
-                im3.save("subimages/image_" + str(counter) + "_tif_3.png")
-            elif depth == 8:
-                im1 = Image.fromarray(dPoint.input[:, :, 0:3])
-                im1.save("subimages/image_" + str(counter) + "_tif_1.png")
-                im2 = Image.fromarray(dPoint.input[:, :, 3:6])
-                im2.save("subimages/image_" + str(counter) + "_tif_2.png")
-                im3 = Image.fromarray(dPoint.input[:, :, 6:8])
-                im3.save("subimages/image_" + str(counter) + "_tif_3.png")
-            elif depth == 9:
-                im1 = Image.fromarray(dPoint.input[:, :, 0:3])
-                im1.save("subimages/image_" + str(counter) + "_tif_1.png")
-                im2 = Image.fromarray(dPoint.input[:, :, 3:6])
-                im2.save("subimages/image_" + str(counter) + "_tif_2.png")
-                im3 = Image.fromarray(dPoint.input[:, :, 6:9])
-                im3.save("subimages/image_" + str(counter) + "_tif_3.png")
-            else:
-                print("Extra Depth in ProcessSkeleton: " + str(depth))   
-            """
-            
             #all images will have a depth of 9 to keep input through UNet constant
             if depth == 6:
                 im1 = Image.fromarray(dPoint.input[:, :, 0:3])
@@ -286,10 +221,40 @@ def main():
                 im3.save("subimages/image_" + str(counter) + "_tif_3.png")
             else:
                 print("Extra Depth in ProcessSkeleton: " + str(depth))
+            """
+            
+            mat1 = None
+            mat2 = None
+            mat3 = None
+            
+            #all images will have a depth of 9 to keep input through UNet constant
+            if depth == 6:
+                mat1 = dPoint.input[:, :, 0:3]
+                mat2 = dPoint.input[:, :, 3:6]
+                mat3 = np.zeros((processor.box_size, processor.box_size, 3), np.uint8)
+            elif depth == 7:
+                mat1 = dPoint.input[:, :, 0:3]
+                mat2 = dPoint.input[:, :, 3:6]
+                mat3 = np.concatenate((dPoint.input[:, :, 6:7], np.zeros((processor.box_size, processor.box_size, 2), np.uint8)), axis = 2)
+            elif depth == 8:
+                mat1 = dPoint.input[:, :, 0:3]
+                mat2 = dPoint.input[:, :, 3:6]
+                mat3 = np.concatenate((dPoint.input[:, :, 6:8], np.zeros((processor.box_size, processor.box_size, 1), np.uint8)), axis = 2)
+            elif depth == 9:
+                mat1 = dPoint.input[:, :, 0:3]
+                mat2 = dPoint.input[:, :, 3:6]
+                mat3 = dPoint.input[:, :, 6:9]
+            else:
+                print("Extra Depth in ProcessSkeleton: " + str(depth))
+            
+            mat = np.concatenate((mat1, mat2, mat3), axis = 0)
+            im = Image.fromarray(mat)
+            im.save("subimages/image_" + str(counter) + "_tif.png")
             
             counter += 1
             
         print("Done: " + str(j))
+        
     
 
 main()

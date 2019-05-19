@@ -15,7 +15,7 @@ import math
 
 def main():
     #train("adam", 10000)
-    generatePredictions("neuron-data/data30_input.tif")
+    generatePredictions("neuron-data/data5_input.tif")
     
 def train(optimize, num_data):
     data_provider = CustomDataProvider("subimages/", num_data)
@@ -41,8 +41,8 @@ def generatePredictions(file):
     tif_mat = TIFFExtractor().extract(file)
     
     print(mat.shape)
-    imageio.imwrite("predicted.png", mat)
-    imageio.imwrite("tif.png", np.max(tif_mat, axis = 0))
+    imageio.imwrite("predicted5.png", mat)
+    imageio.imwrite("tif5.png", np.max(tif_mat, axis = 0))
     
     print("Done")
     

@@ -1,4 +1,5 @@
 # NeuralTracing
+This repo contains everything used to trace semantically segment neurons through neural cross-sectional images. We experimented with two network architechures: Unet and Pix2Pix. We found that the Unet converged quicker, and produced better results when trained in Google Colab.
 
 ### Prerequisites
 Libraries you'll need to run the code:
@@ -33,9 +34,15 @@ We started with an intial dataset of 30 1024x201024xN input(tif) - output(swc) p
 ## Training/Generating Images using Unet
 Run ```RunUnet.py``` and comment out either ```train``` or ```generatePredictions```. Additionally, unzip ```saved_model.zip``` for fully trained weights.
 
+## Training/Generating Images using Pix2Pix
+Run ```RunPix2Pix.py``` and make appropriate changes to the ArgumentParser. Additionally, unzip ```checkpoint.zip``` for fully trained weights.
+
+## Authors
+Andy Xu and Spencer Solit
+
 ## Acknowledgments
 We adapted the following to fit our needs to expedite the coding process:
 1. tf-unet from https://github.com/jakeret/tf_unet
 2. pix2pix_master from https://github.com/yenchenlin/pix2pix-tensorflow
-3. SWCExtractor from https://github.com/zhihaozhengutd/CODES
+3. SWCExtractor.py from https://github.com/zhihaozhengutd/CODES
 

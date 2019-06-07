@@ -14,14 +14,33 @@ import tensorflow as tf
 import math
 
 def main():
-    #train("adam", 10000)
-    generatePredictions("neuron-data/data5_input.tif")
+    #train("adam", 15000)
+    for i in range(0, 30):  
+        generatePredictions("neuron-data/data" + str(i + 1 ) + "_input.tif", i + 1)
+    
+    '''
+    import imageio
+    
+    net = unet.Unet(channels=9,
+                    n_class=2,
+                    layers=3,
+                    features_root=64,
+                    cost_kwargs=dict(regularizer=0.001))
+    
+    tif, swc = DataRetriever().getData("subimages/", 219)
+    
+    predictions = net.predict("saved_model/model.ckpt", np.expand_dims(tif, axis = 0))
+    
+    predictions = convertBoolToIntMat(predictions[..., 0])
+    
+    imageio.imwrite("unet_output.png", predictions[0])
+    '''
     
 def train(optimize, num_data):
     data_provider = CustomDataProvider("subimages/", num_data)
     net = unet.Unet(channels=data_provider.channels,
                     n_class=data_provider.n_class,
-                    layers=3,
+                    layers=4,
                     features_root=64,
                     filter_size=3,
                     cost_kwargs=dict(regularizer=0.001))
@@ -34,15 +53,15 @@ def train(optimize, num_data):
                          display_step=1)
 
 
-def generatePredictions(file):
+def generatePredictions(file, save_num):
     import imageio
 
-    mat = predict(150, 108, file)
+    mat = predict(128, 36, file)
     tif_mat = TIFFExtractor().extract(file)
     
-    print(mat.shape)
-    imageio.imwrite("predicted5.png", mat)
-    imageio.imwrite("tif5.png", np.max(tif_mat, axis = 0))
+    mat[mat > 0.0005] = 1
+    imageio.imwrite("predicted" + str(save_num) + ".png", mat)
+    imageio.imwrite("tif.png", np.max(tif_mat, axis = 0))
     
     print("Done")
     
@@ -58,26 +77,28 @@ def predict(square_size, prediction_size, tif_file_path):
 
     net = unet.Unet(channels=9,
                     n_class=2,
-                    layers=3,
+                    layers=4,
                     features_root=64,
                     cost_kwargs=dict(regularizer=0.001))
     
     predictions = net.predict("saved_model/model.ckpt", inputs)
     
-    predictions = convertBoolToIntMat(predictions[..., 0])
+    predictions = predictions[..., 1]
 
     return reconstructImage(predictions)
     
 def processTif(tif):
     tif = np.transpose(tif, axes = (1, 2, 0))
-    tif = tif.astype(np.uint8)
+    tif = tif.astype(np.float)
     if tif.shape[2] < 9:
         tif = np.pad(tif, [(0, 0), (0, 0), (0, 9 - tif.shape[2])], "constant")
         
-    return tif
+    tif -= np.amin(tif)
 
-def convertBoolToIntMat(mat):
-    return 255 - mat.astype(np.uint8) * 255
+    if np.amax(tif) != 0:
+        tif /= np.amax(tif)
+        
+    return tif
 
 def reconstructImage(squares):
     squares_x = int(math.sqrt(squares.shape[0]))
@@ -116,22 +137,7 @@ def getSubSquares(square_size, prediction_size, image_mat):
             
     return squares
 
-    """
-    # predict more using trained unet
-    data_provider = DataProvider(10000, files)
-    x_test, y_test = data_provider(1)
-    prediction = net.predict(path, x_test)
 
-    """
-
-def loadUnet():
-    # Add ops to save and restore all the variables.
-    saver = tf.train.Saver()
-    
-    # Later, launch the model, use the saver to restore variables from disk, and
-    # do some work with the model.
-    with tf.Session() as sess:
-      saver.restore(sess, "/saved_model/model.ckpt")
       
 
 
@@ -166,7 +172,7 @@ class CustomDataProvider(BaseDataProvider):
     def _next_data(self):
         self._cylce_file()
         
-        data = self.retriever.getData(self.search_path, self.indexes[self.file_idx])
+        data = self.retriever.getDataUnet(self.search_path, self.indexes[self.file_idx])
         
         label = data[0]
         img = data[1]

@@ -9,6 +9,7 @@ import numpy as np
 import random as rand
 from SWCExtractor import SWCExtractor
 from TIFFExtractor import TIFFExtractor
+import random as rand
 
 class SWCNode():
     def __init__(self, index, x, y, z, parent):
@@ -46,6 +47,34 @@ class PreprocessSkeleton():
     tiff = None
     
     ds = 1.612
+    
+    def sampleBoxesFromArea(self, swc_filepath, tiff_filepath, area_bounds, num_boxes):
+        # area bounds must be stored as [x_min, y_min, x_max, y_max]
+        
+        boxes = []
+        
+        self.tiff = TIFFExtractor().extract(tiff_filepath)  
+        
+        mat = np.zeros((30, 1024, 1024), dtype = np.uint8)
+        parent_dict, node_dict = SWCExtractor().generateTree(swc_filepath)
+        delta = SWCExtractor().gridSearch(swc_filepath, tiff_filepath)
+        SWCExtractor().drawTree(parent_dict, node_dict, mat, delta)
+        self.swc = np.max(mat, axis = 0)
+        
+        for i in range(num_boxes):
+            rand_point = Point(int(rand.uniform(area_bounds[0], area_bounds[2])), int(rand.uniform(area_bounds[1], area_bounds[3])))
+            box_swc = self._getBox(rand_point, self.swc)
+            box_tiff = []
+            for layer in self.tiff:
+                box_tiff.append(self._getBox(rand_point, layer))
+
+            box_tiff = np.array(box_tiff)
+            box_tiff = box_tiff.astype('uint8')
+
+            boxes.append(Data(box_tiff, box_swc))
+        
+        return boxes
+        
     
     def generateBoxes(self, swc_filepath, tiff_filepath):
         
@@ -177,51 +206,51 @@ def main():
     
     processor = PreprocessSkeleton()
     
+    #x1, y1, x2, y2
+    artifact_bounds = [[850, 185, 990, 750],
+                       [70, 260, 290, 970],
+                       [135, 45, 500, 285],
+                       [115, 120, 260, 1015],
+                       [110, 300, 325, 900],
+                       [380, 765, 935, 915],
+                       [180, 815, 620, 970],
+                       [831, 165, 990, 680],
+                       [10, 580, 560, 780],
+                       [730, 675, 950, 950],
+                       [225, 430, 400, 800],
+                       [480, 750, 912, 860],
+                       [170, 680, 450, 970],
+                       [180, 180, 385, 815],
+                       [200, 115, 430, 535],
+                       [435, 700, 700, 970],
+                       [150, 110, 700, 380],
+                       [240, 115, 980, 320],
+                       [80, 740, 1000, 960],
+                       [725, 665, 1000, 1000],
+                       [250, 730, 915, 900],
+                       [170, 150, 360, 600],
+                       [630, 40, 870, 670],
+                       [200, 370, 385, 1025],
+                       [250, 225, 400, 700],
+                       [215, 205, 375, 760],
+                       [180, 775, 900, 965],
+                       [175, 170, 460, 1025],
+                       [690, 230, 860, 815],
+                       [125, 175, 280, 640]]
+    
     for j in range(0, 30):
-        data = processor.generateBoxes("neuron-data/data" + str(j + 1) + "_label.swc", "neuron-data/data" + str(j + 1) + "_input.tif")
+        data1 = processor.generateBoxes("neuron-data/data" + str(j + 1) + "_label.swc", "neuron-data/data" + str(j + 1) + "_input.tif")
+        print(len(data1))
+        data2 = processor.sampleBoxesFromArea("neuron-data/data" + str(j + 1) + "_label.swc", "neuron-data/data" + str(j + 1) + "_input.tif", artifact_bounds[j], 150)
+        print(len(data2))
+        data = data1 + data2
+        print(len(data))
         for i in range(len(data)):
             dPoint = data[i]
             imageio.imwrite("subimages/image_" + str(counter) + "_swc.png", dPoint.output)
             
             depth = dPoint.input.shape[0]
             dPoint.input = np.transpose(dPoint.input, (1, 2, 0))
-            
-            
-            """
-            #all images will have a depth of 9 to keep input through UNet constant
-            if depth == 6:
-                im1 = Image.fromarray(dPoint.input[:, :, 0:3])
-                im1.save("subimages/image_" + str(counter) + "_tif_1.png")
-                im2 = Image.fromarray(dPoint.input[:, :, 3:6])
-                im2.save("subimages/image_" + str(counter) + "_tif_2.png")
-                im3 = Image.fromarray(np.zeros((processor.box_size, processor.box_size, 3), np.uint8))
-                im3.save("subimages/image_" + str(counter) + "_tif_3.png")
-            elif depth == 7:
-                im1 = Image.fromarray(dPoint.input[:, :, 0:3])
-                im1.save("subimages/image_" + str(counter) + "_tif_1.png")
-                im2 = Image.fromarray(dPoint.input[:, :, 3:6])
-                im2.save("subimages/image_" + str(counter) + "_tif_2.png")
-                new_layer_3 = np.concatenate((dPoint.input[:, :, 6:7], np.zeros((processor.box_size, processor.box_size, 2), np.uint8)), axis = 2)
-                im3 = Image.fromarray(new_layer_3)
-                im3.save("subimages/image_" + str(counter) + "_tif_3.png")
-            elif depth == 8:
-                im1 = Image.fromarray(dPoint.input[:, :, 0:3])
-                im1.save("subimages/image_" + str(counter) + "_tif_1.png")
-                im2 = Image.fromarray(dPoint.input[:, :, 3:6])
-                im2.save("subimages/image_" + str(counter) + "_tif_2.png")
-                new_layer_3 = np.concatenate((dPoint.input[:, :, 6:8], np.zeros((processor.box_size, processor.box_size, 1), np.uint8)), axis = 2)
-                im3 = Image.fromarray(new_layer_3)
-                im3.save("subimages/image_" + str(counter) + "_tif_3.png")
-            elif depth == 9:
-                im1 = Image.fromarray(dPoint.input[:, :, 0:3])
-                im1.save("subimages/image_" + str(counter) + "_tif_1.png")
-                im2 = Image.fromarray(dPoint.input[:, :, 3:6])
-                im2.save("subimages/image_" + str(counter) + "_tif_2.png")
-                im3 = Image.fromarray(dPoint.input[:, :, 6:9])
-                im3.save("subimages/image_" + str(counter) + "_tif_3.png")
-            else:
-                print("Extra Depth in ProcessSkeleton: " + str(depth))
-            """
             
             mat1 = None
             mat2 = None
@@ -253,8 +282,7 @@ def main():
             
             counter += 1
             
-        print("Done: " + str(j))
-        
+        print("Done: " + str(j) + " " + str(counter))
     
 
 main()

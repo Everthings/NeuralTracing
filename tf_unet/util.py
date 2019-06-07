@@ -25,7 +25,6 @@ import numpy as np
 from PIL import Image
 
 def plot_prediction(x_test, y_test, prediction, save=False):
-    import matplotlib
     import matplotlib.pyplot as plt
     
     test_size = x_test.shape[0]
@@ -123,7 +122,7 @@ def combine_img_prediction(data, gt, pred):
                           to_rgb(pred[..., 1].reshape(-1, ny, 1))), axis=2)
     return img
 
-def save_image(img, path):
+def save_image(img, suffix):
     """
     Writes the image to disk
     
@@ -131,9 +130,9 @@ def save_image(img, path):
     :param path: the target path
     """
 
-    Image.fromarray(np.max(img.round().astype(np.uint8)[:, : , 0:9], axis = 2)).save("input.png")
-    Image.fromarray(img.round().astype(np.uint8)[:, : , 9:12]).save("gt.png")
-    Image.fromarray(img.round().astype(np.uint8)[:, : , 12:15]).save("pred.png")
+    Image.fromarray(np.max(img.round().astype(np.uint8)[:, : , 0:9], axis = 2)).save("input" + suffix + ".png")
+    Image.fromarray(img.round().astype(np.uint8)[:, : , 9:12]).save("gt" + suffix + ".png")
+    Image.fromarray(img.round().astype(np.uint8)[:, : , 12:15]).save("pred" + suffix + ".png")
 
 
 def create_training_path(output_path, prefix="run_"):

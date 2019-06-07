@@ -270,6 +270,8 @@ class Unet(object):
 
             y_dummy = np.empty((x_test.shape[0], x_test.shape[1], x_test.shape[2], self.n_class))
             prediction = sess.run(self.predicter, feed_dict={self.x: x_test, self.y: y_dummy, self.keep_prob: 1.})
+        
+            #prediction = Trainer(self, batch_size=1, verification_batch_size = 1).store_prediction(sess, x_test, y_dummy, "")
 
         return prediction
 
@@ -336,7 +338,13 @@ class Trainer(object):
                                                                                global_step=global_step)
         elif self.optimizer == "adam":
             learning_rate = self.opt_kwargs.pop("learning_rate", 0.001)
-            self.learning_rate_node = tf.Variable(learning_rate, name="learning_rate")
+            decay_rate = self.opt_kwargs.pop("decay_rate", 0.9)
+
+            self.learning_rate_node = tf.train.exponential_decay(learning_rate=learning_rate,
+                                                                 global_step=global_step,
+                                                                 decay_steps=training_iters,
+                                                                 decay_rate=decay_rate,
+                                                                 staircase=True)
 
             optimizer = tf.train.AdamOptimizer(learning_rate=self.learning_rate_node,
                                                **self.opt_kwargs).minimize(self.net.cost,
@@ -425,7 +433,7 @@ class Trainer(object):
                 total_loss = 0
                 for step in range((epoch * training_iters), ((epoch + 1) * training_iters)):
                     batch_x, batch_y = data_provider(self.batch_size)
-
+                    
                     # Run optimization op (backprop)
                     _, loss, lr, gradients = sess.run(
                         (self.optimizer, self.net.cost, self.learning_rate_node, self.net.gradients_node),
@@ -468,9 +476,9 @@ class Trainer(object):
                                                                                    util.crop_to_shape(batch_y,
                                                                                                       prediction.shape)),
                                                                         loss))
-
+        
         img = util.combine_img_prediction(batch_x, batch_y, prediction)
-        util.save_image(img, "%s/%s.jpg" % (self.prediction_path, name))
+        util.save_image(img, "")
 
         return pred_shape
 

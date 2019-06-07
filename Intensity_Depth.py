@@ -36,7 +36,28 @@ class Intensity_Depth:
         final_matrix = self._distributIntensitiesToMat(points)
 
         return final_matrix
+    
+    def mapSWCMat(self, swc_mat, tiff_filepath):
+        self.TIFF = TIFFExtractor().extract(tiff_filepath)
+        points = self._getSWCMatPoints(swc_mat)
+        final_matrix = self._distributIntensitiesToMat(points)
 
+        return final_matrix
+    
+    def _getSWCMatPoints(self, mat):
+        points = []
+        for x in range(mat.shape[0]):
+            for y in range(mat.shape[1]):
+                if mat[x][y] != 0:
+                    p = Point(x, y)
+                    intensities = self._getIntensities(p)
+                    new_z = self._calcZ(intensities)
+                    #points.append(Point(point.x, point.z, new_z))
+                    p.add_z(new_z)
+                    points.append(p)
+                
+        return points
+        
 
     def _generateTree(self, size, swcfile):
         parent_dict = dict()
@@ -195,10 +216,9 @@ def main():
     from PIL import Image
     from skimage import io
     
-    
+    '''
     mat = Intensity_Depth().map((10, 1024, 1024), "neuron-data/data1_label.swc", "neuron-data/data1_input.tif")
 
-    
     for i in range(1, 32):
         mat = Intensity_Depth().map((10, 1024, 1024), "neuron-data/data" + str(i) + "_label.swc", "neuron-data/data" + str(i) + "_input.tif")
     
@@ -224,15 +244,18 @@ def main():
             im3.save("processed-swcs/data" + str(i) + "_label" + "_3.tif")
 
         print("Saved: " + str(i))
+    '''
 
+    import imageio
+    for i in range(1, 31):
+        mat = Intensity_Depth().mapSWCMat(io.imread("model_outputs/predicted" + str(i) +  ".png"), "neuron-data/data" + str(i) + "_input.tif")
+
+        for layer in range(mat.shape[0]):
+            imageio.imwrite("mapped_outputs/swc_" + str(i) + "_" + str(layer) + ".png", mat[layer])
+
+        print("Saved: " + str(i))
     
-    #for i in range(8):
-    #    imageio.imwrite("swc_layer_" + str(i) + ".png", mat[i])
     
-    #mat = TIFFExtractor().readSWCTIFFS("processed-swcs/data10_label_1.tif", "processed-swcs/data10_label_2.tif")
-    
-    #for i in range(8):
-    #    imageio.imwrite("oi" + str(i) + ".png", mat[i])
 
 
 main()

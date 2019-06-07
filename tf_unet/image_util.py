@@ -62,6 +62,7 @@ class BaseDataProvider(object):
             labels = np.zeros((ny, nx, self.n_class), dtype=np.float32)
             labels[..., 1] = label
             labels[..., 0] = ~label
+            
             return labels
         
         return label

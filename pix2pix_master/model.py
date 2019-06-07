@@ -195,11 +195,11 @@ class pix2pix(object):
                     % (epoch, idx, batch_idxs,
                         time.time() - start_time, errD_fake+errD_real, errG))
 
-                if np.mod(counter, 1) == 0:
+                if np.mod(counter, 50) == 2:
                     print("images sampled.")
                     self.sample_model(args.sample_dir, epoch, idx, folder, lower_bound_index, upper_bound_index)
 
-                if np.mod(counter, 10) == 2:
+                if np.mod(counter, 50) == 2:
                     print("checkpoint saved.")
                     self.save(args.checkpoint_dir, counter)
 
@@ -399,3 +399,44 @@ class pix2pix(object):
             )
             save_images(samples, [self.batch_size, 1],
                         './{}/test_{:04d}.png'.format(args.test_dir, idx))
+            
+    def predict(self, args, data, init = True):
+        """Test pix2pix"""
+        
+        if init:
+            init_op = tf.global_variables_initializer()
+            self.sess.run(init_op)
+
+        print("Loading testing images ...")
+        sample = data
+        
+        sample_images = None
+
+        if (self.is_grayscale):
+            sample_images = np.array(sample).astype(np.float32)[:, :, :, None]
+        else:
+            sample_images = np.array(sample).astype(np.float32)
+
+        sample_images = [sample_images[i:i+self.batch_size]
+                         for i in xrange(0, len(sample_images), self.batch_size)]
+        sample_images = np.array(sample_images)
+        print(sample_images.shape)
+
+        start_time = time.time()
+        if self.load(self.checkpoint_dir):
+            print(" [*] Load SUCCESS")
+        else:
+            print(" [!] Load failed...")
+            
+        predictions = []
+
+        for i, sample_image in enumerate(sample_images):
+            idx = i+1
+            print("sampling image ", idx)
+            samples = self.sess.run(
+                self.fake_B_sample,
+                feed_dict={self.real_data: sample_image}
+            )
+            predictions.append(samples[0, :, :, 0])
+            
+        return predictions

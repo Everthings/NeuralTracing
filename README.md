@@ -38,7 +38,7 @@ Run ```RunUnet.py``` and comment out either ```train``` or ```generatePrediction
 Run ```RunPix2Pix.py``` and make appropriate changes to the ArgumentParser. Additionally, unzip ```checkpoint.zip``` for fully trained weights.
 
 ## Authors
-Andy Xu and Spencer Solit__
+Andy Xu and Spencer Solit<br />
 with help from Zhihao Zheng and Prof. Penguyu Hong
 
 ## Acknowledgments

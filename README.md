@@ -39,6 +39,7 @@ Run ```RunPix2Pix.py``` and make appropriate changes to the ArgumentParser. Addi
 
 ## Authors
 Andy Xu and Spencer Solit
+with help from Zhihao Zheng and Prof. Penguyu Hong
 
 ## Acknowledgments
 We adapted the following open-source libararies to fit our needs to expedite the coding process:

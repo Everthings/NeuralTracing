@@ -41,7 +41,7 @@ Run ```RunPix2Pix.py``` and make appropriate changes to the ArgumentParser. Addi
 Andy Xu and Spencer Solit
 
 ## Acknowledgments
-We adapted the following to fit our needs to expedite the coding process:
+We adapted the following open-source libararies to fit our needs to expedite the coding process:
 1. tf-unet from https://github.com/jakeret/tf_unet
 2. pix2pix_master from https://github.com/yenchenlin/pix2pix-tensorflow
 3. SWCExtractor.py from https://github.com/zhihaozhengutd/CODES
